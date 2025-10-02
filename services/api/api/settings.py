@@ -172,10 +172,16 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
+cache_location = os.getenv(
+    "CACHE_DIR",
+    str((BASE_DIR / ".." / ".." / "data" / "cache_api").resolve()),
+)
+Path(cache_location).mkdir(parents=True, exist_ok=True)
+
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "api-cache",
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": cache_location,
     }
 }
 

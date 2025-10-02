@@ -162,10 +162,16 @@ SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "true").lower() in {"
 CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "true").lower() in {"1", "true", "yes"}
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
+cache_location = os.getenv(
+    "CACHE_DIR",
+    str((BASE_DIR / ".." / ".." / "data" / "cache_admin").resolve()),
+)
+Path(cache_location).mkdir(parents=True, exist_ok=True)
+
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "admin-cache",
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": cache_location,
     }
 }
 

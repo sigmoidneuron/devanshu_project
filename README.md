@@ -48,6 +48,7 @@ Key variables:
 - `ALLOWED_HOSTS`: Comma-separated hosts each service will trust.
 - `CORS_ALLOWLIST`: Origins permitted to call the service (`https://www.example.com` for API, `https://admin.example.com` for admin).
 - `RATE_LIMITS_PUBLIC`, `RATE_LIMITS_ADMIN`, `RATE_LIMITS_LOGIN`: Rate limit strings for DRF and `django-ratelimit`.
+- `CACHE_DIR`: Directory for the shared file-based cache used by rate limiting.
 
 ### Switching to PostgreSQL
 
