@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: Phone Number Search API
+  version: "1.0.0"
+paths:
+  /v1/prefixes:
+    get:
+      summary: List area code prefixes
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: q
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: Successful response
+  /v1/search:
+    get:
+      summary: Search for related phone numbers
+      parameters:
+        - in: query
+          name: area_code
+          schema:
+            type: string
+        - in: query
+          name: number
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+  /v1/healthz:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+  /v1/ready:
+    get:
+      summary: Readiness check
+      responses:
+        '200':
+          description: OK
