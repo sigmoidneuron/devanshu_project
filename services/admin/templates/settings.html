@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h2>Change Credentials</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <p>{{ form.current_password.label_tag }} {{ form.current_password }}</p>
+    <p>{{ form.new_username.label_tag }} {{ form.new_username }}</p>
+    <p>{{ form.new_password.label_tag }} {{ form.new_password }}</p>
+    <button type="submit">Update</button>
+</form>
+{% endblock %}

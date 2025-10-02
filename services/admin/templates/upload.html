@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Bulk Upload{% endblock %}
+{% block content %}
+<h2>Bulk Upload Numbers</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+{% if results %}
+<section>
+    <h3>Results</h3>
+    <p>Inserted: {{ results.inserted }} | Updated: {{ results.updated }} | Errors: {{ results.errors }}</p>
+    {% if results.error_rows %}
+    <table>
+        <thead>
+            <tr><th>Row</th><th>Errors</th></tr>
+        </thead>
+        <tbody>
+        {% for row in results.error_rows %}
+            <tr>
+                <td>{{ row.row }}</td>
+                <td>{{ row.errors }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock %}

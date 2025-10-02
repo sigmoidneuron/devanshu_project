@@ -1,0 +1,74 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    env_file:
+      - services/api/.env.example
+    volumes:
+      - ./data:/app/data
+      - ./shared:/app/shared
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/v1/ready')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  admin:
+    build:
+      context: .
+      dockerfile: services/admin/Dockerfile
+    env_file:
+      - services/admin/.env.example
+    volumes:
+      - ./data:/app/data
+      - ./shared:/app/shared
+      - ./services/admin/static:/app/services/admin/static
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/v1/ready')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: phone_numbers
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  nginx:
+    build:
+      context: .
+      dockerfile: infra/deploy/nginx.Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api
+      - admin
+    volumes:
+      - certs:/etc/letsencrypt
+
+volumes:
+  db-data:
+  certs:
+  data:
