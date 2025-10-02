@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Numbers{% endblock %}
+{% block content %}
+<section>
+    <h2>Numbers</h2>
+    <form method="get" class="filters">
+        <label>Area Code <input type="text" name="area_code" value="{{ area_filter }}" maxlength="3"></label>
+        <label>Search <input type="text" name="search" value="{{ search }}" maxlength="7"></label>
+        <label>Ordering
+            <select name="ordering">
+                <option value="area_code" {% if ordering == "area_code" %}selected{% endif %}>Area Code ↑</option>
+                <option value="-area_code" {% if ordering == "-area_code" %}selected{% endif %}>Area Code ↓</option>
+                <option value="phone_number" {% if ordering == "phone_number" %}selected{% endif %}>Number ↑</option>
+                <option value="-phone_number" {% if ordering == "-phone_number" %}selected{% endif %}>Number ↓</option>
+                <option value="cost" {% if ordering == "cost" %}selected{% endif %}>Cost ↑</option>
+                <option value="-cost" {% if ordering == "-cost" %}selected{% endif %}>Cost ↓</option>
+            </select>
+        </label>
+        <button type="submit">Apply</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Area Code</th>
+                <th>Number</th>
+                <th>Cost</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for number in page_obj.object_list %}
+            <tr>
+                <form method="post" action="/numbers/action">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="update" />
+                    <input type="hidden" name="id" value="{{ number.id }}" />
+                    <td><input type="text" name="area_code" value="{{ number.area_code }}" maxlength="3" /></td>
+                    <td><input type="text" name="phone_number" value="{{ number.phone_number }}" maxlength="7" /></td>
+                    <td><input type="number" name="cost" value="{{ number.cost }}" min="0" /></td>
+                    <td>
+                        <button type="submit">Save</button>
+                </form>
+                <form method="post" action="/numbers/action" style="display:inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="hidden" name="id" value="{{ number.id }}" />
+                    <button type="submit" onclick="return confirm('Delete this number?')">Delete</button>
+                </form>
+                    </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&area_code={{ area_filter }}&search={{ search }}&ordering={{ ordering }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&area_code={{ area_filter }}&search={{ search }}&ordering={{ ordering }}">Next</a>
+        {% endif %}
+    </div>
+</section>
+<section>
+    <h3>Create Number</h3>
+    <form method="post" action="/numbers/action">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="create" />
+        {{ form.as_p }}
+        <button type="submit">Create</button>
+    </form>
+</section>
+{% endblock %}
