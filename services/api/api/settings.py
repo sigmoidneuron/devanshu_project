@@ -157,7 +157,7 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.JSONParser",
     ],
     "DEFAULT_THROTTLE_CLASSES": [
-        "api.numbers.throttles.PublicRateThrottle",
+        "api.phone_numbers.throttles.PublicRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
         "public": os.getenv("RATE_LIMITS_PUBLIC", "60/min"),
