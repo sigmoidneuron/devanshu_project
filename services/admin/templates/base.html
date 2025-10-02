@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+    <header>
+        <h1>Phone Numbers Admin</h1>
+        <nav>
+            <a href="/numbers">Numbers</a>
+            <a href="/upload">Bulk Upload</a>
+            <a href="/settings">Settings</a>
+            <form method="post" action="/logout/" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Sign Out</button>
+            </form>
+        </nav>
+    </header>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
