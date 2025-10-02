@@ -49,6 +49,7 @@ Key variables:
 - `CORS_ALLOWLIST`: Origins permitted to call the service (`https://www.example.com` for API, `https://admin.example.com` for admin).
 - `RATE_LIMITS_PUBLIC`, `RATE_LIMITS_ADMIN`, `RATE_LIMITS_LOGIN`: Rate limit strings for DRF and `django-ratelimit`.
 - `CACHE_DIR`: Directory for the shared file-based cache used by rate limiting.
+- `RATELIMIT_CACHE_TABLE`: Database table name for the dedicated rate-limit cache backend.
 
 ### Switching to PostgreSQL
 

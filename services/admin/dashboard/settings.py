@@ -168,14 +168,21 @@ cache_location = os.getenv(
 )
 Path(cache_location).mkdir(parents=True, exist_ok=True)
 
+ratelimit_table = os.getenv("RATELIMIT_CACHE_TABLE", "ratelimit_cache")
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
         "LOCATION": cache_location,
-    }
+    },
+    "ratelimit": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": ratelimit_table,
+    },
 }
 
-RATELIMIT_USE_CACHE = "default"
+RATELIMIT_USE_CACHE = "ratelimit"
+RATELIMIT_CACHE_TABLE = ratelimit_table
 LOGIN_RATE_LIMIT = os.getenv("RATE_LIMITS_LOGIN", "10/15m")
 ADMIN_API_RATE_LIMIT = os.getenv("RATE_LIMITS_ADMIN", "120/min")
 
