@@ -4,6 +4,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+from .startup import setup_application
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dashboard.settings")
 
-application = get_wsgi_application()
+application = setup_application(get_wsgi_application)
